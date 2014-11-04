@@ -3,6 +3,19 @@
       '(("melpa"
 	 . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
+
+;Recursively add site-lisp to the load path
+;Make sure custom stuff goes to the front of the list
+(let ((default-directory "~/.emacs.d/elisp"))
+  (let ((old-path (copy-sequence load-path))
+                (new-load-path nil))
+        (normal-top-level-add-to-load-path '("."))
+        (normal-top-level-add-subdirs-to-load-path)
+        (dolist (var load-path)
+          (unless (memql var old-path)
+                (add-to-list 'new-load-path var)
+                (setq load-path (append new-load-path old-path))))))
+
 (require 'company)
 (require 'cl)
 (require 'csharp-mode)
@@ -52,7 +65,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Consolas" :foundry "outline" :slant normal :weight normal :height 113 :width normal))))
+ '(default ((t (:family "Consolas" :foundry "outline" :slant normal :weight normal :height 98 :width normal))))
  '(company-tooltip-annotation ((t (:inherit company-tooltip :foreground "yellow")))))
 (global-hl-line-mode 1)
 (setq c-basic-offset 4) ; indents 4 chars
