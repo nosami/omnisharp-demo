@@ -6,7 +6,7 @@
 
 ;Recursively add site-lisp to the load path
 ;Make sure custom stuff goes to the front of the list
-(let ((default-directory "~/.emacs.d/elisp"))
+(let ((default-directory "~/.emacs.d/site-lisp"))
   (let ((old-path (copy-sequence load-path))
                 (new-load-path nil))
         (normal-top-level-add-to-load-path '("."))
