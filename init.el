@@ -15,7 +15,7 @@
 
 (setq omnisharp-company-strip-trailing-brackets nil)
 (add-hook 'csharp-mode-hook 'my-csharp-mode)
-
+(set-scroll-bar-mode nil)
 (tool-bar-mode -1)
 (load-theme 'monokai t)
 (setq company-begin-commands '(self-insert-command))
@@ -57,3 +57,23 @@
 ;; To customize the background color
 (set-face-background 'hl-line "#333")
 (setq ring-bell-function 'ignore)
+
+(show-paren-mode t)
+(global-set-key (kbd "M-x") 'smex)
+
+;; esc quits
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit.
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
