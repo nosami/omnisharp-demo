@@ -26,6 +26,8 @@
   (company-mode)
   (flycheck-mode)
   (turn-on-eldoc-mode))
+(setq eldoc-idle-delay 0.1
+      flycheck-display-errors-delay 0.2)
 
 (setq omnisharp-company-strip-trailing-brackets nil)
 (add-hook 'csharp-mode-hook 'my-csharp-mode)
