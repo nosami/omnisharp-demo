@@ -889,7 +889,7 @@ triggers a completion immediately"
                        
 (defun omnisharp--tag-text-with-completion-info (call json-result)
   "Adds data to the completed text which we then use in ElDoc"
-  (add-text-properties (- (point) (length call)) (point)
+  (add-text-properties (- (point) (length call)) (- (point) 1)
                        (list 'omnisharp-result json-result)))
 
 (defun omnisharp--yasnippet-tag-text-with-completion-info ()
@@ -960,7 +960,13 @@ SomeMethod(int parameter)' and the original value ITEM."
           (method-base
            (setq output method-base)))
     
+    ;; When we aren't templating, show the full description of the
+    ;; method, rather than just the return type
+    (when (not allow-templating)
+      (setq annotation (concat omnisharp-company-type-separator
+                               display)))
 
+    ;; Embed in completion into the completion text, so we can use it later
     (add-text-properties 0 (length output)
                          (list 'omnisharp-item json-result
                                'omnisharp-ann annotation
@@ -2134,7 +2140,12 @@ result."
 
                  ((looking-at-p "(")
                   (setq test-point (point))
-                  (forward-sexp)
+
+                  ;; forward-sexp will throw an error if the sexp is unbalanced
+                  (condition-case nil
+                      (forward-sexp)
+                    (error nil))
+                  
                   (when (> (point) start-point)
                     (setq found-point test-point)
                     (setq found-start t))
