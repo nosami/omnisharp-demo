@@ -101,4 +101,58 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+(fset 'yes-or-no-p 'y-or-n-p) ;;stop asking me to type ‘yes’ as a confirmation
+(ido-mode t)
+(setq ido-enable-flex-matching t)
+(setq ido-create-new-buffer 'always)
 
+(defun check-expansion ()
+  (save-excursion
+    (if (looking-at "\\_>") t
+      (backward-char 1)
+      (if (looking-at "\\.") t
+        (backward-char 1)
+        (if (looking-at "->") t nil)))))
+
+(defun do-yas-expand ()
+  (let ((yas/fallback-behavior 'return-nil))
+    (yas/expand)))
+
+(defun tab-indent-or-complete ()
+  (interactive)
+  (if (minibufferp)
+      (minibuffer-complete)
+    (if (or (not yas/minor-mode)
+            (null (do-yas-expand)))
+        (if (check-expansion)
+            (company-complete-common)
+          (indent-for-tab-command)))))
+
+(define-key company-active-map (kbd "<tab>") 'tab-indent-or-complete)
+
+(defun dos2unix (buffer)
+  "Automate M-% C-q C-m RET C-q C-j RET"
+  (interactive "*b")
+  (save-excursion
+    (goto-char (point-min))
+    (while (search-forward (string ?\C-m) nil t)
+      (replace-match "" nil t)))
+  nil
+  )
+
+(require 'helm-config)
+(require 'helm-command)
+(require 'helm-elisp)
+(require 'helm-misc)
+(require 'omnisharp)
+(global-set-key (kbd "C-x f") 'helm-for-files)
+(define-key helm-map (kbd "C-j") 'helm-next-line)
+(define-key helm-map (kbd "C-k") 'helm-previous-line)
+
+(define-key omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition )
+(define-key omnisharp-mode-map (kbd "S-<f12>") 'omnisharp-helm-find-usages)
+(define-key omnisharp-mode-map (kbd "<M-RET>") 'omnisharp-run-code-action-refactoring)
+(define-key omnisharp-mode-map (kbd "C-k d") 'omnisharp-code-format)
+(define-key omnisharp-mode-map (kbd "C-k C-d") 'omnisharp-code-format)
+(define-key omnisharp-mode-map (kbd "<f2>") 'omnisharp-rename-interactively)
+(define-key omnisharp-mode-map (kbd "<f5>") 'omnisharp-build-in-emacs)
