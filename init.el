@@ -146,6 +146,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'helm-misc)
 (require 'omnisharp)
 (global-set-key (kbd "C-x f") 'helm-for-files)
+(global-set-key (kbd "C-M-l") 'dired-jump)
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+
 (define-key helm-map (kbd "C-j") 'helm-next-line)
 (define-key helm-map (kbd "C-k") 'helm-previous-line)
 
