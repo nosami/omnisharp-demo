@@ -221,11 +221,11 @@ server backend."
       (make-local-variable 'eldoc-documentation-function)
       (setq eldoc-documentation-function 'omnisharp-eldoc-function)))
 
-  ;; These are selected automatically when flycheck is enabled
-  (add-to-list 'flycheck-checkers
-               'csharp-omnisharp-curl)
-  (add-to-list 'flycheck-checkers
-               'csharp-omnisharp-curl-code-issues)
+;; These are selected automatically when flycheck is enabled
+;;  (add-to-list 'flycheck-checkers
+;;             'csharp-omnisharp-curl)
+;;  (add-to-list 'flycheck-checkers
+;;               'csharp-omnisharp-curl-code-issues)
   (add-to-list 'flycheck-checkers
                'csharp-omnisharp-curl-semantic-errors))
 
@@ -1825,7 +1825,7 @@ compilation."
             (eval
              (omnisharp--get-curl-command-executable-string-for-api-name
               (omnisharp--get-common-params)
-              "semanticerrors")))
+              "codecheck")))
 
   :error-patterns ((error line-start
                           (file-name) ":"

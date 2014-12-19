@@ -1,0 +1,1 @@
+("c:/Users/jason.imison/src/omnisharp-roslyn/" "~/.emacs.d/")
