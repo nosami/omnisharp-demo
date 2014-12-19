@@ -222,13 +222,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key helm-map (kbd "C-k") 'helm-previous-line)
 ;;VS keys
 (define-key omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition )
-(define-key omnisharp-mode-map (kbd "s-D") 'omnisharp-go-to-definition )
+(define-key omnisharp-mode-map (kbd "s-d") 'omnisharp-go-to-definition)
 (define-key omnisharp-mode-map (kbd "S-<f12>") 'omnisharp-helm-find-usages)
 (define-key omnisharp-mode-map (kbd "S-s-<f12>") 'omnisharp-helm-find-usages)
 (define-key omnisharp-mode-map (kbd "<M-RET>") 'omnisharp-run-code-action-refactoring)
 (define-key omnisharp-mode-map (kbd "<C-.>") 'omnisharp-run-code-action-refactoring)
 
-(define-key omnisharp-mode-map (kbd "C-k d") 'omnisharp-code-format)
+(define-key omnisharp-mode-map (kbd "C-k C-d") 'omnisharp-code-format)
 
 (define-key omnisharp-mode-map (kbd "<f2>") 'omnisharp-rename-interactively)
 (define-key omnisharp-mode-map (kbd "<f5>") 'omnisharp-build-in-emacs)
