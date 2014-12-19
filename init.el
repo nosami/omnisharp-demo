@@ -229,7 +229,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key omnisharp-mode-map (kbd "<C-.>") 'omnisharp-run-code-action-refactoring)
 
 (define-key omnisharp-mode-map (kbd "C-k d") 'omnisharp-code-format)
-(define-key omnisharp-mode-map (kbd "C-k C-c") 'omnisharp-code-format)
 
 (define-key omnisharp-mode-map (kbd "<f2>") 'omnisharp-rename-interactively)
 (define-key omnisharp-mode-map (kbd "<f5>") 'omnisharp-build-in-emacs)
