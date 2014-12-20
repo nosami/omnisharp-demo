@@ -239,6 +239,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key global-map (kbd "s-<up>") 'scroll-down)
 (define-key global-map (kbd "s-<down>") 'scroll-up)
 (define-key global-map (kbd "s-f") 'toggle-frame-fullscreen)
+(define-key global-map (kbd "C-g") 'goto-line)
 
 (require 'key-chord)
 (key-chord-mode 1)
