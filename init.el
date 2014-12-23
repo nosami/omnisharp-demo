@@ -107,6 +107,7 @@
     (company-pseudo-tooltip-frontend company-echo-metadata-frontend)))
  '(company-idle-delay 0.03)
  '(company-minimum-prefix-length 1)
+ '(company-require-match nil)
  '(company-show-numbers t)
  '(cua-mode t nil (cua-base))
  '(helm-ag-insert-at-point (quote word))
@@ -117,9 +118,9 @@
  '(safe-local-variable-values
    (quote
     ((eval when
-           (fboundp
-            (quote rainbow-mode))
-           (rainbow-mode 1)))))
+	   (fboundp
+	    (quote rainbow-mode))
+	   (rainbow-mode 1)))))
  '(savehist-mode t)
  '(show-paren-mode t)
  '(tool-bar-mode nil))
@@ -133,7 +134,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- 
  '(company-tooltip-annotation ((t (:inherit company-tooltip :foreground "yellow")))))
 (global-hl-line-mode 1)
  
