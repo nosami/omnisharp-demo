@@ -390,10 +390,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
 (global-set-key (kbd "C-x C-f") 'helm-for-files)
 ;;window movement
-(global-set-key (kbd "C-h") 'windmove-left)
-(global-set-key (kbd "C-l") 'windmove-right)
-(global-set-key (kbd "C-j") 'windmove-down)
-(global-set-key (kbd "C-k") 'windmove-up)
+;;(global-set-key (kbd "C-h") 'windmove-left)
+;;(global-set-key (kbd "C-l") 'windmove-right)
+;;(global-set-key (kbd "C-j") 'windmove-down)
+;;(global-set-key (kbd "C-k") 'windmove-up)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 ;;Make emacs backups happen elsewhere:
 (setq backup-directory-alist (quote ((".*" . "~/.emacs_backups/")))) ;; Save all backup file in this directory.
