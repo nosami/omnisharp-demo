@@ -96,7 +96,7 @@
 (tool-bar-mode -1)
 (load-theme 'monokai t)
 (setq company-begin-commands '(self-insert-command))
-(setq omnisharp-company-do-template-completion t)
+(setq omnisharp-company-do-template-completion nil)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -118,9 +118,9 @@
  '(safe-local-variable-values
    (quote
     ((eval when
-	   (fboundp
-	    (quote rainbow-mode))
-	   (rainbow-mode 1)))))
+           (fboundp
+            (quote rainbow-mode))
+           (rainbow-mode 1)))))
  '(savehist-mode t)
  '(show-paren-mode t)
  '(tool-bar-mode nil))
@@ -412,3 +412,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq c-basic-offset 4) ; indents 4 chars
 (setq tab-width 4)          ; and 4 char wide for TAB
 (setq indent-tabs-mode nil) ; And force use of spaces
+
+
+
