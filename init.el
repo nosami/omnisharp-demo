@@ -256,7 +256,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;; (define-key evil-insert-state-map (kbd "j k") 'evil-normal-state)
 
 ;; (define-key evil-insert-state-map (kbd "k j") 'evil-normal-state)
-(define-key global-map (kbd "C-p") 'helm-projectile)
+;;(define-key global-map (kbd "C-p") 'helm-projectile)
 (define-key global-map (kbd "C-,") 'helm-projectile)
 ;; (define-key evil-normal-state-map (kbd "<SPC> e") 'find-file)
 ;; (define-key evil-normal-state-map (kbd "<SPC> w") 'evil-write)
@@ -297,7 +297,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq whitespace-style '(trailing tabs tab-mark))
 
 
-(define-key global-map (kbd "C-<RET>") 'ace-jump-mode)
+(define-key global-map (kbd "s-j") 'ace-jump-mode)
 ;; (define-key evil-normal-state-map (kbd "<SPC> <SPC>") 'ace-jump-mode)
 ;; (mapc (lambda (mode) (evil-set-initial-state mode 'emacs))
 ;;       '(eshell-mode
