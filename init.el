@@ -405,9 +405,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;(global-set-key (kbd "C-j") 'windmove-down)
 ;;(global-set-key (kbd "C-k") 'windmove-up)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
-;;Make emacs backups happen elsewhere:
-(setq backup-directory-alist (quote ((".*" . "~/.emacs_backups/")))) ;; Save all backup file in this directory.
-(setq auto-save-file-name-transforms `((".*", "~/.emacs_backups/" t)))
+
+(setq backup-directory-alist
+          `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+          `((".*" ,temporary-file-directory t)))
+
 (require 'highlight-parentheses)
 (define-globalized-minor-mode global-highlight-parentheses-mode
   highlight-parentheses-mode
