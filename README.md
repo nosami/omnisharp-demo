@@ -8,9 +8,8 @@ This is meant for people who are new to emacs and want to get running quickly.
 
 To install ```git clone https://github.com/nosami/omnisharp-demo.git ~/.emacs.d```
 
----------------------------------------------------------------------------------------------------
 | Feature                                | Keybinding         | Notes                             |
----------------------------------------------------------------------------------------------------
+|----------------------------------------|--------------------|-----------------------------------|
 | Intellisense                           | None               | Automatic                         |
 | Goto Definition                        | Cmd-D, F12         |                                   |
 | Find Usages                            | Cmd-U or Shift-F12 |                                   |
@@ -25,4 +24,3 @@ To install ```git clone https://github.com/nosami/omnisharp-demo.git ~/.emacs.d`
 | Open current file in Directory Listing | Ctrl-Alt-L         |                                   |
 | Full screen mode                       | Cmd-F              |                                   |
 | Jump to word                           | Cmd-J              | Then first character of the word  |
----------------------------------------------------------------------------------------------------
