@@ -241,6 +241,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key global-map (kbd "s-f") 'toggle-frame-fullscreen)
 (define-key global-map (kbd "C-g") 'goto-line)
 
+;; disable emacs ctrl-k key.... we need it for VS shortcuts
+(global-unset-key "\C-r")
+
+(define-key omnisharp-mode-map (kbd "C-r C-t") (lambda() (interactive) (omnisharp-unit-test "single")))
+(define-key omnisharp-mode-map (kbd "C-r C-a") (lambda() (interactive) (omnisharp-unit-test "all")))
+(define-key omnisharp-mode-map (kbd "C-r C-l") 'recompile)
+(define-key omnisharp-mode-map (kbd "C-r C-r") 'omnisharp-rename)
+
+(define-key omnisharp-mode-map (kbd "<M-RET>") 'omnisharp-run-code-action-refactoring)
+(define-key omnisharp-mode-map (kbd "<C-.>") 'omnisharp-run-code-action-refactoring)
 (require 'key-chord)
 (key-chord-mode 1)
 
@@ -414,4 +424,20 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq indent-tabs-mode nil) ; And force use of spaces
 
 
+(defun omnisharp-unit-test (mode)
+  "Run tests after building the solution. Mode should be one of 'single', 'fixture' or 'all'" 
+  (interactive)
+
+  ;; (defvar test-resonse "yo")
+  (let ((test-response
+         (omnisharp-post-message-curl-as-json
+          (concat (omnisharp-get-host) "gettestcontext") 
+          (cons `("Type" . ,mode) (omnisharp--get-common-params)))))
+    (let ((test-command
+           (cdr (assoc 'TestCommand test-response)))
+
+          (test-directory
+           (cdr (assoc 'Directory test-response))))
+      (cd test-directory)
+      (compile test-command))))
 
