@@ -205,7 +205,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'helm-elisp)
 (require 'helm-misc)
 (require 'omnisharp)
-
+(setq compilation-ask-about-save nil)
 ;; disable emacs ctrl-k key.... we need it for VS shortcuts
 (global-unset-key "\C-k")
 (global-set-key (kbd "C-x f") 'helm-for-files)
