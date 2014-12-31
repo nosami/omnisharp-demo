@@ -1,6 +1,6 @@
 omnisharp-demo
 ==============
-
+![omnisharp-emacs screenshot](https://raw.githubusercontent.com/nosami/nosami.github.io/master/emacs-demo.png)
 Ready made emacs configuration for [omnisharp-emacs](https://github.com/OmniSharp/omnisharp-emacs)
 with a bunch of plugins ready installed and keybindings designed to be familiar to VS/Resharper users.
 
