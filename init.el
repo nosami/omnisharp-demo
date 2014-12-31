@@ -153,6 +153,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+(define-key company-mode-map [escape] 'company-abort)
 
 (fset 'yes-or-no-p 'y-or-n-p) ;;stop asking me to type ‘yes’ as a confirmation
 (ido-mode t)
