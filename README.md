@@ -22,7 +22,7 @@ You might want to use an alias such as
 ```alias e='/Applications/Emacs.app/Contents/MacOS/Emacs'``` in your ~/.bashrc or ~/.zshrc file.
 
 | Feature                                | Keybinding         | Notes                             |
-|----------------------------------------+--------------------+-----------------------------------|
+|----------------------------------------|--------------------|-----------------------------------|
 | Intellisense                           | None               | Automatic                         |
 | Goto Definition                        | Cmd-D, F12         |                                   |
 | Find Usages                            | Cmd-U or Shift-F12 |                                   |
