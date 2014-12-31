@@ -1,0 +1,19 @@
+# key: tf
+# contributor: Jason Imison <jasonimison@gmail.com>
+# name: testfixture
+# --
+using NUnit.Framework;
+using Should;
+
+namespace `(file-path-to-namespace)`
+{
+    [TestFixture]
+    public class ${1:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}
+    {
+        [Test]
+        public void Should_$2()
+        {
+            $0
+        }
+    }
+}

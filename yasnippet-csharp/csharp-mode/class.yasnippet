@@ -1,0 +1,8 @@
+# key: class
+# contributor: Jason Imison <jasonimison@gmail.com>
+# name: Class with name from file                             
+# --
+public class ${1:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}
+{
+    $0
+}

@@ -182,6 +182,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (indent-for-tab-command)))))
 
 (define-key company-active-map (kbd "<tab>") 'tab-indent-or-complete)
+(setq yas-snippet-dirs
+      '("~/.emacs.d/yasnippet-csharp"))
+
+(yas-global-mode 1)
 
 (defun dos2unix (buffer)
   "Automate M-% C-q C-m RET C-q C-j RET"

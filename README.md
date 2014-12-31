@@ -40,3 +40,26 @@ You might want to use an alias such as
 | Incremental search                     | Ctrl-S             | Press again to repeat             |
 | Save file                              | Cmd-S              |                                   |
 | Quit                                   | Cmd-Q              |                                   |
+
+Snippets
+--------
+Type abbreviation followed by tab key to complete. Press tab again to
+move between snippet placeholders.
+
+| class     | Class with name from file                     |
+| ctor      | Constructor with name generated from filename |
+| cw        | Console.WriteLine                             |
+| else      | else                                          |
+| elif      | else if { .. Condition .. }                   |
+| for       | for                                           |
+| foreach   | foreach                                       |
+| if        | If                                            |
+| namespace | Namespace from folder name                    |
+| private   | private method                                |
+| prop      | Public property                               |
+| public    | public method                                 |
+| tcf       | Try Catch Finally                             |
+| test      | NUnit test method                             |
+| tf        | NUnit test fixture                            |
+| while     | while                                         |
+
