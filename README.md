@@ -2,7 +2,7 @@ omnisharp-demo
 ==============
 
 Ready made emacs configuration for [omnisharp-emacs](https://github.com/OmniSharp/omnisharp-emacs)
-with a bunch of plugins ready installed.
+with a bunch of plugins ready installed and keybindings designed to be familiar to VS/Resharper users.
 
 Don't use this if you already have an emacs installation that you want to keep!!
 
@@ -22,7 +22,7 @@ You might want to use an alias such as
 ```alias e='/Applications/Emacs.app/Contents/MacOS/Emacs'``` in your ~/.bashrc or ~/.zshrc file.
 
 | Feature                                | Keybinding         | Notes                             |
-|----------------------------------------|--------------------|-----------------------------------|
+|----------------------------------------+--------------------+-----------------------------------|
 | Intellisense                           | None               | Automatic                         |
 | Goto Definition                        | Cmd-D, F12         |                                   |
 | Find Usages                            | Cmd-U or Shift-F12 |                                   |
@@ -37,3 +37,6 @@ You might want to use an alias such as
 | Open current file in Directory Listing | Ctrl-Alt-L         |                                   |
 | Full screen mode                       | Cmd-F              |                                   |
 | Jump to word                           | Cmd-J              | Then first character of the word  |
+| Incremental search                     | Ctrl-S             | Press again to repeat             |
+| Save file                              | Cmd-S              |                                   |
+| Quit                                   | Cmd-Q              |                                   |

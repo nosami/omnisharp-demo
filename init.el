@@ -206,6 +206,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "C-k C-u") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "C-x f") 'helm-for-files)
 
+;; find current buffer in directory
 (global-set-key (kbd "C-M-l") 'dired-jump)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C-=") 'text-scale-increase)
@@ -234,8 +235,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key global-map (kbd "s-f") 'toggle-frame-fullscreen)
 (define-key global-map (kbd "C-g") 'goto-line)
 
-;; disable emacs ctrl-k key.... we need it for VS shortcuts
+;; disable emacs ctrl-r key.... we need it for VS shortcuts
 (global-unset-key "\C-r")
+;; enable ctrl-s to wrap around seeing as we disabled ctrl-r
+(defadvice isearch-repeat (after isearch-no-fail activate)
+  (unless isearch-success
+    (ad-disable-advice 'isearch-repeat 'after 'isearch-no-fail)
+    (ad-activate 'isearch-repeat)
+    (isearch-repeat (if isearch-forward 'forward))
+    (ad-enable-advice 'isearch-repeat 'after 'isearch-no-fail)
+    (ad-activate 'isearch-repeat)))
 
 (define-key omnisharp-mode-map (kbd "C-r C-t") (lambda() (interactive) (omnisharp-unit-test "single")))
 (define-key omnisharp-mode-map (kbd "C-r C-a") (lambda() (interactive) (omnisharp-unit-test "all")))
