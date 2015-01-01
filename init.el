@@ -1,5 +1,6 @@
 (defvar mswindows-p (string-match "windows" (symbol-name system-type)))
 (cua-mode 1);; cut / copy / paste for noobs
+
 (defun find-project-root ()
   (interactive)
   (if (ignore-errors (eproject-root))
@@ -76,6 +77,7 @@
   (omnisharp-mode)
   (company-mode)
   (flycheck-mode)
+  (linum-mode)
   (setq c-basic-offset 4) ; indents 4 chars
   (setq tab-width 4)          ; and 4 char wide for TAB
   (setq indent-tabs-mode nil) ; And force use of spaces
@@ -353,3 +355,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (cd test-directory)
       (compile test-command))))
 
+(setq cursor-type 'bar)
