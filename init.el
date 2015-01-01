@@ -212,7 +212,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "C-x f") 'helm-for-files)
 
 ;; find current buffer in directory
-(global-set-key (kbd "C-M-l") 'dired-jump)
+(global-set-key (kbd "C-M-l") 'neotree-find)
+(global-set-key (kbd "<f7>") 'neotree-toggle)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
@@ -308,10 +309,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
 (global-set-key (kbd "C-x C-f") 'helm-for-files)
 ;;window movement
-;;(global-set-key (kbd "C-h") 'windmove-left)
-;;(global-set-key (kbd "C-l") 'windmove-right)
-;;(global-set-key (kbd "C-j") 'windmove-down)
-;;(global-set-key (kbd "C-k") 'windmove-up)
+(global-set-key (kbd "M-<left>") 'windmove-left)
+(global-set-key (kbd "M-<right>") 'windmove-right)
+(global-set-key (kbd "M-<down>") 'windmove-down)
+(global-set-key (kbd "M-<up>") 'windmove-up)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 
 (setq backup-directory-alist
