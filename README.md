@@ -21,27 +21,29 @@ You might want to use an alias such as
 
 ```alias e='/Applications/Emacs.app/Contents/MacOS/Emacs'``` in your ~/.bashrc or ~/.zshrc file.
 
-| Feature                                | Keybinding         | Notes                             |
-|----------------------------------------|--------------------|-----------------------------------|
-| Intellisense                           | None               | Automatic                         |
-| Goto Definition                        | Cmd-D, F12         | Might want to disable OSX F12 key |
-| Find Usages                            | Cmd-U or Shift-F12 |                                   |
-| Rename                                 | F2 or Ctrl-R,R     |                                   |
-| Run test                               | Ctrl-R-T           | Currently, only k test supported. |
-| Run all tests                          | Ctrl-R-A           | Start emacs from the shell        |
-| Run last tests                         | Ctrl-R-L           | to get the PATH set up correctly  |
-| Find file in project                   | Ctrl-, or Ctrl-P   |                                   |
-| Format Document                        | Ctrl-K,D           |                                   |
-| Comment block or line                  | Ctrl-K,C           |                                   |
-| Go to line number                      | Ctrl-G             |                                   |
-| Open current file in Directory Listing | Ctrl-Alt-L         |                                   |
-| Toggle directory view                  | F7                 |                                   |
-| Full screen mode                       | Cmd-F              |                                   |
-| Jump to word                           | Cmd-J              | Then first character of the word  |
-| Incremental search                     | Ctrl-S             | Press again to repeat             |
-| Navigate split windows                 | Alt- ← ↑ ↓ →       |                                   |
-| Save file                              | Cmd-S              |                                   |
-| Quit                                   | Cmd-Q              |                                   |
+| Feature                                | Keybinding         | Notes                                                     |
+|----------------------------------------|--------------------|-----------------------------------------------------------|
+| Intellisense                           | None               | Automatic                                                 |
+| Goto Definition                        | Cmd-D, F12         | Might want to disable OSX F12 key                         |
+| Find Usages                            | Cmd-U or Shift-F12 |                                                           |
+| Rename                                 | F2 or Ctrl-R,R     |                                                           |
+| Run test                               | Ctrl-R-T           | Currently, only k test supported.                         |
+| Run all tests                          | Ctrl-R-A           | Start emacs from the shell                                |
+| Run last tests                         | Ctrl-R-L           | to get the PATH set up correctly                          |
+| Find file in project                   | Ctrl-, or Ctrl-P   |                                                           |
+| Format Document                        | Ctrl-K,D           |                                                           |
+| Comment block or line                  | Ctrl-K,C           |                                                           |
+| Go to line number                      | Ctrl-G             |                                                           |
+| Open current file in Directory Listing | Ctrl-Alt-L         |                                                           |
+| Toggle directory view                  | F7                 |                                                           |
+| Full screen mode                       | Cmd-F              |                                                           |
+| Jump to word                           | Cmd-J              | Then first character of the word                          |
+| Incremental search                     | Ctrl-S             | Press again to repeat                                     |
+| Switch to previous buffer              | Ctrl-Tab           |                                                           |
+| Find in files (incrementally!)         | Ctrl-Shift-F       | Requires ag https://github.com/ggreer/the_silver_searcher |
+| Navigate split windows                 | Alt- ← ↑ ↓ →       |                                                           |
+| Save file                              | Cmd-S              |                                                           |
+| Quit                                   | Cmd-Q              |                                                           |
 
 Snippets
 --------
