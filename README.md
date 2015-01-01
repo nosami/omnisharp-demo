@@ -21,27 +21,27 @@ You might want to use an alias such as
 
 ```alias e='/Applications/Emacs.app/Contents/MacOS/Emacs'``` in your ~/.bashrc or ~/.zshrc file.
 
-| Keybinding         | Notes                             | Feature                                |
-|--------------------+-----------------------------------+----------------------------------------|
-| None               | Automatic                         | Intellisense                           |
-| Cmd-D, F12         | Might want to disable OSX F12 key | Goto Definition                        |
-| Cmd-U or Shift-F12 |                                   | Find Usages                            |
-| F2 or Ctrl-R,R     |                                   | Rename                                 |
-| Ctrl-R-T           | Currently, only k test supported. | Run test                               |
-| Ctrl-R-A           | Start emacs from the shell        | Run all tests                          |
-| Ctrl-R-L           | to get the PATH set up correctly  | Run last tests                         |
-| Ctrl-, or Ctrl-P   |                                   | Find file in project                   |
-| Ctrl-K,D           |                                   | Format Document                        |
-| Ctrl-K,C           |                                   | Comment block or line                  |
-| Ctrl-G             |                                   | Go to line number                      |
-| Ctrl-Alt-L         |                                   | Open current file in Directory Listing |
-| F7                 |                                   | Toggle directory view                  |
-| Cmd-F              |                                   | Full screen mode                       |
-| Cmd-J              | Then first character of the word  | Jump to word                           |
-| Ctrl-S             | Press again to repeat             | Incremental search                     |
-| Alt- ←↑↓→          |                                   | Navigate split windows                 |
-| Cmd-S              |                                   | Save file                              |
-| Cmd-Q              |                                   | Quit                                   |
+| Feature                                | Keybinding         | Notes                             |
+|----------------------------------------|--------------------|-----------------------------------|
+| Intellisense                           | None               | Automatic                         |
+| Goto Definition                        | Cmd-D, F12         | Might want to disable OSX F12 key |
+| Find Usages                            | Cmd-U or Shift-F12 |                                   |
+| Rename                                 | F2 or Ctrl-R,R     |                                   |
+| Run test                               | Ctrl-R-T           | Currently, only k test supported. |
+| Run all tests                          | Ctrl-R-A           | Start emacs from the shell        |
+| Run last tests                         | Ctrl-R-L           | to get the PATH set up correctly  |
+| Find file in project                   | Ctrl-, or Ctrl-P   |                                   |
+| Format Document                        | Ctrl-K,D           |                                   |
+| Comment block or line                  | Ctrl-K,C           |                                   |
+| Go to line number                      | Ctrl-G             |                                   |
+| Open current file in Directory Listing | Ctrl-Alt-L         |                                   |
+| Toggle directory view                  | F7                 |                                   |
+| Full screen mode                       | Cmd-F              |                                   |
+| Jump to word                           | Cmd-J              | Then first character of the word  |
+| Incremental search                     | Ctrl-S             | Press again to repeat             |
+| Navigate split windows                 | Alt- ← ↑ ↓ →       |                                   |
+| Save file                              | Cmd-S              |                                   |
+| Quit                                   | Cmd-Q              |                                   |
 
 Snippets
 --------
@@ -49,7 +49,7 @@ Type abbreviation followed by tab key to complete. Press tab again to
 move between snippet placeholders.
 
 | Abbreviation | Expands to                                    |
-|--------------+-----------------------------------------------|
+|--------------|-----------------------------------------------|
 | class        | Class with name from file                     |
 | ctor         | Constructor with name generated from filename |
 | cw           | Console.WriteLine                             |
