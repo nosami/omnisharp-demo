@@ -240,7 +240,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key global-map (kbd "s-<down>") 'scroll-up)
 (define-key global-map (kbd "s-f") 'toggle-frame-fullscreen)
 (define-key global-map (kbd "C-g") 'goto-line)
-
+(define-key global-map (kbd "C-F") 'helm-projectile-ag)
+(global-set-key [(control tab)] 'bury-buffer)
+(global-set-key [(control shift tab)] 'unbury-buffer)
 ;; disable emacs ctrl-r key.... we need it for VS shortcuts
 (global-unset-key "\C-r")
 ;; enable ctrl-s to wrap around seeing as we disabled ctrl-r
