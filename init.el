@@ -91,7 +91,7 @@
 (tool-bar-mode -1)
 (load-theme 'monokai t)
 (setq company-begin-commands '(self-insert-command))
-(setq omnisharp-company-do-template-completion true)
+(setq omnisharp-company-do-template-completion t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
