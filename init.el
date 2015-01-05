@@ -91,7 +91,7 @@
 (tool-bar-mode -1)
 (load-theme 'monokai t)
 (setq company-begin-commands '(self-insert-command))
-(setq omnisharp-company-do-template-completion nil)
+(setq omnisharp-company-do-template-completion true)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -355,4 +355,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (cd test-directory)
       (compile test-command))))
 
-(setq cursor-type 'bar)
+(setq-default cursor-type 'bar)
