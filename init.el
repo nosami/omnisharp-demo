@@ -90,7 +90,7 @@
 (set-scroll-bar-mode nil)
 (tool-bar-mode -1)
 (load-theme 'monokai t)
-(set-face-attribute 'region nil :background "#555")
+(set-face-attribute 'region nil :background "#555" :foreground: "#fff")
 (setq company-begin-commands '(self-insert-command))
 (setq omnisharp-company-do-template-completion t)
 (custom-set-variables
