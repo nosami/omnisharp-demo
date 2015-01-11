@@ -301,8 +301,8 @@ shown in a compilation buffer."
         (kill-buffer ambiguous-results-buffer))))
 
 (defun omnisharp-fix-usings-worker (filename
-				    current-line
-				    current-column)
+                                    current-line
+                                    current-column)
   "Sets the current buffer contents to a buffer with fixed up usings
 or if necessary, returns any ambiguous results so the user may fix
 them manually."
@@ -1351,6 +1351,22 @@ contents with the issue at point fixed."
     (omnisharp-find-usages-worker
      (omnisharp--get-common-params)
      'omnisharp--helm-got-usages))
+
+  (defun omnisharp--helm-got-implementations (quickfixes)
+    (setq omnisharp-helm-implementations-candidates (mapcar 'omnisharp--helm-usage-transform-candidate quickfixes))
+    (helm :sources (helm-make-source "Omnisharp - Symbol Usages" 'helm-source-sync
+                                     :candidates omnisharp-helm-implementations-candidates
+                                     :action 'omnisharp--helm-jump-to-candidate) ;
+          :truncate-lines t
+          :buffer omnisharp--find-implementations-buffer-name))
+
+  (defun omnisharp-helm-find-implementations ()
+    "Find usages for the symbol under point using Helm"
+    (interactive)
+    (message "Helm Finding implementations...")
+    (omnisharp-find-implementations-worker
+     (omnisharp--get-common-params)
+     'omnisharp--helm-got-implementations))
 
   (defun omnisharp--helm-jump-to-candidate (json-result)
     (omnisharp-go-to-file-line-and-column json-result)
