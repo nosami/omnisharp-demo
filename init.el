@@ -228,11 +228,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;VS keys
 (define-key omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition )
 (define-key omnisharp-mode-map (kbd "s-d") 'omnisharp-go-to-definition)
-
+f
 (define-key omnisharp-mode-map (kbd "S-<f12>") 'omnisharp-helm-find-usages)
 
 (define-key omnisharp-mode-map (kbd "s-u") 'omnisharp-helm-find-usages)
-(define-key omnisharp-mode-map (kbd "s-i") 'omnisharp-find-implementations)
+(define-key omnisharp-mode-map (kbd "s-i") 'omnisharp-helm-find-implementations)
 (define-key omnisharp-mode-map (kbd "S-s-<f12>") 'omnisharp-helm-find-usages)
 (define-key omnisharp-mode-map (kbd "<M-RET>") 'omnisharp-run-code-action-refactoring)
 (define-key omnisharp-mode-map (kbd "<C-.>") 'omnisharp-run-code-action-refactoring)

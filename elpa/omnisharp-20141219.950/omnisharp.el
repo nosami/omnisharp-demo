@@ -1353,13 +1353,23 @@ contents with the issue at point fixed."
      'omnisharp--helm-got-usages))
 
   (defun omnisharp--helm-got-implementations (quickfixes)
-    (setq omnisharp-helm-implementations-candidates (mapcar 'omnisharp--helm-usage-transform-candidate quickfixes))
+    ;; (lambda (quickfixes)
+      (cond ((equal 0 (length quickfixes))
+             (message "No implementations found."))
+
+            ;; Go directly to the implementation if there only is one
+            ((equal 1 (length quickfixes))
+             (omnisharp-go-to-file-line-and-column (car quickfixes)))
+
+            (t (setq omnisharp-helm-implementations-candidates (mapcar 'omnisharp--helm-usage-transform-candidate quickfixes))
     (helm :sources (helm-make-source "Omnisharp - Symbol Usages" 'helm-source-sync
                                      :candidates omnisharp-helm-implementations-candidates
                                      :action 'omnisharp--helm-jump-to-candidate) ;
           :truncate-lines t
           :buffer omnisharp--find-implementations-buffer-name))
 
+             ))
+    
   (defun omnisharp-helm-find-implementations ()
     "Find usages for the symbol under point using Helm"
     (interactive)
