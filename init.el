@@ -211,10 +211,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;; disable emacs ctrl-k key.... we need it for VS shortcuts
 (global-unset-key "\C-k")
 (global-unset-key "\C-d")
-(global-set-key (kbd "C-x f") 'helm-for-files)
 (global-set-key (kbd "C-k C-c") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "C-k C-u") 'comment-or-uncomment-region-or-line)
-(global-set-key (kbd "C-x f") 'helm-for-files)
+(global-set-key (kbd "s-o") 'ido-find-file)
 
 ;; find current buffer in directory
 (global-set-key (kbd "C-M-l") 'neotree-find)
@@ -248,6 +247,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key global-map (kbd "s-f") 'toggle-frame-fullscreen)
 (define-key global-map (kbd "C-g") 'goto-line)
 (define-key global-map (kbd "C-F") 'helm-projectile-ag)
+(global-set-key (kbd "C-x C-f") 'helm-for-files)
+
 (global-set-key [(control tab)] 'bury-buffer)
 (global-set-key [(control shift tab)] 'unbury-buffer)
 ;; disable emacs ctrl-r key.... we need it for VS shortcuts
@@ -301,7 +302,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key company-active-map (kbd "<SPC>") nil)
 (define-key company-active-map (kbd ";") (lambda() (interactive) (company-complete-selection-insert-key '";")))
 (define-key company-active-map (kbd ">") (lambda() (interactive) (company-complete-selection-insert-key '">")))
-(global-set-key (kbd "C-x f") 'helm-for-files)
 (global-set-key [M-left] 'elscreen-previous)
 (global-set-key [M-right] 'elscreen-next)
 ;; This is your old M-x.
@@ -316,7 +316,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq ido-create-new-buffer 'always)
 ;;ido for better buffer management:
 (global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
-(global-set-key (kbd "C-x C-f") 'helm-for-files)
 ;;window movement
 (global-set-key (kbd "M-<left>") 'windmove-left)
 (global-set-key (kbd "M-<right>") 'windmove-right)
