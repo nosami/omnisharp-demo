@@ -78,6 +78,7 @@
   (company-mode)
   (flycheck-mode)
   (linum-mode)
+  (whole-line-or-region-mode)
   (setq c-basic-offset 4) ; indents 4 chars
   (setq tab-width 4)          ; and 4 char wide for TAB
   (setq indent-tabs-mode nil) ; And force use of spaces
