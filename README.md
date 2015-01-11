@@ -35,6 +35,7 @@ You might want to use an alias such as
 | Format Document                        | Ctrl-K,D           |                                                           |
 | Comment block or line                  | Ctrl-K,C           |                                                           |
 | Go to line number                      | Ctrl-G             |                                                           |
+| Duplicate line or region               | Ctrl-D             |                                                           |
 | Open current file in Directory Listing | Ctrl-Alt-L         |                                                           |
 | Toggle directory view                  | F7                 |                                                           |
 | Full screen mode                       | Cmd-F              |                                                           |

@@ -319,7 +319,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "M-<left>") 'windmove-left)
 (global-set-key (kbd "M-<right>") 'windmove-right)
 (global-set-key (kbd "M-<down>") 'windmove-down)
+
 (global-set-key (kbd "M-<up>") 'windmove-up)
+(global-set-key (kbd "C-d") 'duplicate-current-line-or-region)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 
 (setq backup-directory-alist
@@ -344,6 +346,25 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq tab-width 4)          ; and 4 char wide for TAB
 (setq indent-tabs-mode nil) ; And force use of spaces
 
+(defun duplicate-current-line-or-region (arg)
+  "Duplicates the current line or region ARG times.
+If there's no region, the current line will be duplicated. However, if
+there's a region, all lines that region covers will be duplicated."
+  (interactive "p")
+  (let (beg end (origin (point)))
+    (if (and mark-active (> (point) (mark)))
+        (exchange-point-and-mark))
+    (setq beg (line-beginning-position))
+    (if mark-active
+        (exchange-point-and-mark))
+    (setq end (line-end-position))
+    (let ((region (buffer-substring-no-properties beg end)))
+      (dotimes (i arg)
+        (goto-char end)
+        (newline)
+        (insert region)
+        (setq end (point)))
+      (goto-char (+ origin (* (length region) arg) arg)))))
 
 (defun omnisharp-unit-test (mode)
   "Run tests after building the solution. Mode should be one of 'single', 'fixture' or 'all'" 
