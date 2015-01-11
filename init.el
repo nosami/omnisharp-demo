@@ -90,7 +90,7 @@
 (set-scroll-bar-mode nil)
 (tool-bar-mode -1)
 (load-theme 'monokai t)
-(set-face-attribute 'region nil :background "#555" :foreground: "#fff")
+(set-face-attribute 'region nil :background "#555")
 (setq company-begin-commands '(self-insert-command))
 (setq omnisharp-company-do-template-completion t)
 (custom-set-variables
@@ -324,7 +324,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
           `((".*" ,temporary-file-directory t)))
-
+;; disable auto-save and auto-backup
+(setq auto-save-default nil)
+(setq make-backup-files nil)
 (require 'highlight-parentheses)
 (define-globalized-minor-mode global-highlight-parentheses-mode
   highlight-parentheses-mode
