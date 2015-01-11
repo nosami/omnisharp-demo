@@ -210,6 +210,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq compilation-ask-about-save nil)
 ;; disable emacs ctrl-k key.... we need it for VS shortcuts
 (global-unset-key "\C-k")
+(global-unset-key "\C-d")
 (global-set-key (kbd "C-x f") 'helm-for-files)
 (global-set-key (kbd "C-k C-c") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "C-k C-u") 'comment-or-uncomment-region-or-line)
@@ -237,6 +238,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key omnisharp-mode-map (kbd "<C-.>") 'omnisharp-run-code-action-refactoring)
 
 (define-key omnisharp-mode-map (kbd "C-k C-d") 'omnisharp-code-format)
+(define-key omnisharp-mode-map (kbd "C-d") 'duplicate-current-line-or-region)
 
 (define-key omnisharp-mode-map (kbd "<f2>") 'omnisharp-rename-interactively)
 (define-key omnisharp-mode-map (kbd "<f5>") 'omnisharp-build-in-emacs)
@@ -322,7 +324,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "M-<down>") 'windmove-down)
 
 (global-set-key (kbd "M-<up>") 'windmove-up)
-(global-set-key (kbd "C-d") 'duplicate-current-line-or-region)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 
 (setq backup-directory-alist
@@ -383,3 +384,4 @@ there's a region, all lines that region covers will be duplicated."
       (compile test-command))))
 
 (setq-default cursor-type 'bar)
+(global-set-key (kbd "C-d") 'duplicate-current-line-or-region)
