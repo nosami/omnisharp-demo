@@ -26,6 +26,7 @@ You might want to use an alias such as
 | Intellisense                           | None               | Automatic                                                 |
 | Goto Definition                        | Cmd-D, F12         | Might want to disable OSX F12 key                         |
 | Find Usages                            | Cmd-U or Shift-F12 |                                                           |
+| Find Implementations                   | Cmd-I              |                                                           |
 | Rename                                 | F2 or Ctrl-R,R     |                                                           |
 | Run test                               | Ctrl-R-T           | Currently, only k test supported.                         |
 | Run all tests                          | Ctrl-R-A           | Start emacs from the shell                                |
