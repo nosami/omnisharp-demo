@@ -316,6 +316,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq ido-create-new-buffer 'always)
 ;;ido for better buffer management:
 (global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
+(global-set-key (kbd "s-b") 'ido-switch-buffer)
 ;;window movement
 (global-set-key (kbd "M-<left>") 'windmove-left)
 (global-set-key (kbd "M-<right>") 'windmove-right)
