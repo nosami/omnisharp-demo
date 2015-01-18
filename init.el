@@ -291,6 +291,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (company-complete-selection-insert-key company-key)
   (company-complete))
 
+(defun csharp-indent-function-on-closing-brace()
+  (interactive)
+  (insert "}")
+  (c-indent-defun))
+
 ;; better than vim-vinegar
 (require 'dired)
 
@@ -302,6 +307,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key company-active-map (kbd "<SPC>") nil)
 (define-key company-active-map (kbd ";") (lambda() (interactive) (company-complete-selection-insert-key '";")))
 (define-key company-active-map (kbd ">") (lambda() (interactive) (company-complete-selection-insert-key '">")))
+(define-key omnisharp-mode-map (kbd "}") 'csharp-indent-function-on-closing-brace) 
 (global-set-key [M-left] 'elscreen-previous)
 (global-set-key [M-right] 'elscreen-next)
 ;; This is your old M-x.
