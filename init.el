@@ -79,6 +79,7 @@
   (flycheck-mode)
   (linum-mode)
   (whole-line-or-region-mode)
+  (autopair-mode)
   (setq c-basic-offset 4) ; indents 4 chars
   (setq tab-width 4)          ; and 4 char wide for TAB
   (setq indent-tabs-mode nil) ; And force use of spaces
@@ -295,6 +296,23 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (insert "}")
   (c-indent-defun))
+(defun csharp-newline-and-indent ()
+  "Open a newline and indent.
+If point is between a pair of braces, opens newlines to put braces
+on their own line."
+  (interactive)
+  (save-excursion
+    (save-match-data
+      (when (and
+             (looking-at " *}")
+             (save-match-data
+               (when (looking-back "{ *")
+                 (goto-char (match-beginning 0))
+                 (newline-and-indent)
+                 t)))
+        (goto-char (match-beginning 0))
+        (newline-and-indent))))
+  (newline-and-indent))
 
 ;; better than vim-vinegar
 (require 'dired)
@@ -308,6 +326,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key company-active-map (kbd ";") (lambda() (interactive) (company-complete-selection-insert-key '";")))
 (define-key company-active-map (kbd ">") (lambda() (interactive) (company-complete-selection-insert-key '">")))
 (define-key omnisharp-mode-map (kbd "}") 'csharp-indent-function-on-closing-brace) 
+(define-key omnisharp-mode-map (kbd "<RET>") 'csharp-newline-and-indent) 
 (global-set-key [M-left] 'elscreen-previous)
 (global-set-key [M-right] 'elscreen-next)
 ;; This is your old M-x.
