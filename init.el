@@ -1,4 +1,6 @@
 (defvar mswindows-p (string-match "windows" (symbol-name system-type)))
+(defvar linux-p (string-match "linux" (symbol-name system-type)))
+
 (cua-mode 1);; cut / copy / paste for noobs
 
 (defun find-project-root ()
@@ -126,6 +128,9 @@
 (when mswindows-p
   (set-face-attribute 'default nil
                       :family "Consolas" :height 100))
+(when linux-p
+  (set-face-attribute 'default nil
+                      :family "Ubuntu Mono" :height 100))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -318,7 +323,6 @@ on their own line."
 (require 'dired)
 
 (define-key company-active-map (kbd ".") (lambda() (interactive) (company-complete-selection-insert-key-and-complete '".")))
-(define-key company-active-map (kbd "(") (lambda() (interactive) (company-complete-selection-insert-key-and-complete '"(")))
 (define-key company-active-map (kbd "]") (lambda() (interactive) (company-complete-selection-insert-key-and-complete '"]")))
 (define-key company-active-map (kbd "[") (lambda() (interactive) (company-complete-selection-insert-key '"[")))
 (define-key company-active-map (kbd ")") (lambda() (interactive) (company-complete-selection-insert-key '")")))
