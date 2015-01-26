@@ -113,8 +113,8 @@
  '(helm-ag-insert-at-point (quote word))
  '(omnisharp-auto-complete-want-documentation nil)
  '(omnisharp-company-sort-results t)
- '(omnisharp-server-executable-path
-   (quote /Users/jason/\.vim/bundle/Omnisharp/server/OmniSharp/bin/Debug/OmniSharp\.exe))
+ ;; '(omnisharp-server-executable-path
+ ;;   (quote /Users/jason/\.vim/bundle/Omnisharp/server/OmniSharp/bin/Debug/OmniSharp\.exe))
  '(safe-local-variable-values
    (quote
     ((eval when
