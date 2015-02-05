@@ -72,25 +72,6 @@
                 (setq load-path (append new-load-path old-path))))))
 
 (require 'company)
-(require 'csharp-mode)
-
-(defun my-csharp-mode ()
-  (add-to-list 'company-backends 'company-omnisharp)
-  (omnisharp-mode)
-  (company-mode)
-  (flycheck-mode)
-  (linum-mode)
-  (whole-line-or-region-mode)
-  (autopair-mode)
-  (setq c-basic-offset 4) ; indents 4 chars
-  (setq tab-width 4)          ; and 4 char wide for TAB
-  (setq indent-tabs-mode nil) ; And force use of spaces
-  (turn-on-eldoc-mode))
-  (setq eldoc-idle-delay 0.1
-      flycheck-display-errors-delay 0.2)
-
-(setq omnisharp-company-strip-trailing-brackets nil)
-(add-hook 'csharp-mode-hook 'my-csharp-mode)
 (set-scroll-bar-mode nil)
 (tool-bar-mode -1)
 (load-theme 'monokai t)
@@ -214,11 +195,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'helm-misc)
 (require 'omnisharp)
 (setq compilation-ask-about-save nil)
-;; disable emacs ctrl-k key.... we need it for VS shortcuts
-(global-unset-key "\C-k")
-(global-unset-key "\C-d")
-(global-set-key (kbd "C-k C-c") 'comment-or-uncomment-region-or-line)
-(global-set-key (kbd "C-k C-u") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "s-o") 'ido-find-file)
 
 ;; find current buffer in directory
@@ -231,21 +207,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key helm-map (kbd "C-j") 'helm-next-line)
 (define-key helm-map (kbd "C-k") 'helm-previous-line)
 ;;VS keys
-(define-key omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition )
-(define-key omnisharp-mode-map (kbd "s-d") 'omnisharp-go-to-definition)
-(define-key omnisharp-mode-map (kbd "S-<f12>") 'omnisharp-helm-find-usages)
-
-(define-key omnisharp-mode-map (kbd "s-u") 'omnisharp-helm-find-usages)
-(define-key omnisharp-mode-map (kbd "s-i") 'omnisharp-helm-find-implementations)
-(define-key omnisharp-mode-map (kbd "S-s-<f12>") 'omnisharp-helm-find-usages)
-(define-key omnisharp-mode-map (kbd "<M-RET>") 'omnisharp-run-code-action-refactoring)
-(define-key omnisharp-mode-map (kbd "<C-.>") 'omnisharp-run-code-action-refactoring)
-
-(define-key omnisharp-mode-map (kbd "C-k C-d") 'omnisharp-code-format)
-(define-key omnisharp-mode-map (kbd "C-d") 'duplicate-current-line-or-region)
-
-(define-key omnisharp-mode-map (kbd "<f2>") 'omnisharp-rename-interactively)
-(define-key omnisharp-mode-map (kbd "<f5>") 'omnisharp-build-in-emacs)
 (define-key global-map (kbd "s-<left>") 'beginning-of-line)
 (define-key global-map (kbd "s-<right>") 'end-of-line)
 (define-key global-map (kbd "s-<up>") 'scroll-down)
@@ -257,8 +218,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (global-set-key [(control tab)] 'bury-buffer)
 (global-set-key [(control shift tab)] 'unbury-buffer)
-;; disable emacs ctrl-r key.... we need it for VS shortcuts
-(global-unset-key "\C-r")
 ;; enable ctrl-s to wrap around seeing as we disabled ctrl-r
 (defadvice isearch-repeat (after isearch-no-fail activate)
   (unless isearch-success
@@ -268,13 +227,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (ad-enable-advice 'isearch-repeat 'after 'isearch-no-fail)
     (ad-activate 'isearch-repeat)))
 
-(define-key omnisharp-mode-map (kbd "C-r C-t") (lambda() (interactive) (omnisharp-unit-test "single")))
-(define-key omnisharp-mode-map (kbd "C-r C-a") (lambda() (interactive) (omnisharp-unit-test "all")))
-(define-key omnisharp-mode-map (kbd "C-r C-l") 'recompile)
-(define-key omnisharp-mode-map (kbd "C-r C-r") 'omnisharp-rename)
-
-(define-key omnisharp-mode-map (kbd "<M-RET>") 'omnisharp-run-code-action-refactoring)
-(define-key omnisharp-mode-map (kbd "<C-.>") 'omnisharp-run-code-action-refactoring)
 (require 'key-chord)
 (key-chord-mode 1)
 
@@ -322,15 +274,6 @@ on their own line."
 ;; better than vim-vinegar
 (require 'dired)
 
-(define-key company-active-map (kbd ".") (lambda() (interactive) (company-complete-selection-insert-key-and-complete '".")))
-(define-key company-active-map (kbd "]") (lambda() (interactive) (company-complete-selection-insert-key-and-complete '"]")))
-(define-key company-active-map (kbd "[") (lambda() (interactive) (company-complete-selection-insert-key '"[")))
-(define-key company-active-map (kbd ")") (lambda() (interactive) (company-complete-selection-insert-key '")")))
-(define-key company-active-map (kbd "<SPC>") nil)
-(define-key company-active-map (kbd ";") (lambda() (interactive) (company-complete-selection-insert-key '";")))
-(define-key company-active-map (kbd ">") (lambda() (interactive) (company-complete-selection-insert-key '">")))
-(define-key omnisharp-mode-map (kbd "}") 'csharp-indent-function-on-closing-brace) 
-(define-key omnisharp-mode-map (kbd "<RET>") 'csharp-newline-and-indent) 
 (global-set-key [M-left] 'elscreen-previous)
 (global-set-key [M-right] 'elscreen-next)
 ;; This is your old M-x.
@@ -376,40 +319,17 @@ on their own line."
 (setq tab-width 4)          ; and 4 char wide for TAB
 (setq indent-tabs-mode nil) ; And force use of spaces
 
-(defun duplicate-current-line-or-region (arg)
-  "Duplicates the current line or region ARG times.
-If there's no region, the current line will be duplicated. However, if
-there's a region, all lines that region covers will be duplicated."
-  (interactive "p")
-  (let (beg end (origin (point)))
-    (if (and mark-active (> (point) (mark)))
-        (exchange-point-and-mark))
-    (setq beg (line-beginning-position))
-    (if mark-active
-        (exchange-point-and-mark))
-    (setq end (line-end-position))
-    (let ((region (buffer-substring-no-properties beg end)))
-      (dotimes (i arg)
-        (goto-char end)
-        (newline)
-        (insert region)
-        (setq end (point)))
-      (goto-char (+ origin (* (length region) arg) arg)))))
+(defun load-directory (directory)
+  "Load recursively all `.el' files in DIRECTORY."
+  (dolist (element (directory-files-and-attributes directory nil nil nil))
+    (let* ((path (car element))
+           (fullpath (concat directory "/" path))
+           (isdir (car (cdr element)))
+           (ignore-dir (or (string= path ".") (string= path ".."))))
+      (cond
+       ((and (eq isdir t) (not ignore-dir))
+        (load-directory fullpath))
+       ((and (eq isdir nil) (string= (substring path -3) ".el"))
+        (load (file-name-sans-extension fullpath)))))))
+(load-directory "~/.emacs.d/config")
 
-(defun omnisharp-unit-test (mode)
-  "Run tests after building the solution. Mode should be one of 'single', 'fixture' or 'all'" 
-  (interactive)
-  (let ((test-response
-         (omnisharp-post-message-curl-as-json
-          (concat (omnisharp-get-host) "gettestcontext") 
-          (cons `("Type" . ,mode) (omnisharp--get-common-params)))))
-    (let ((test-command
-           (cdr (assoc 'TestCommand test-response)))
-
-          (test-directory
-           (cdr (assoc 'Directory test-response))))
-      (cd test-directory)
-      (compile test-command))))
-
-(setq-default cursor-type 'bar)
-(global-set-key (kbd "C-d") 'duplicate-current-line-or-region)
