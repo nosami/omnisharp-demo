@@ -16,7 +16,7 @@
 (define-key omnisharp-mode-map (kbd "s-i") 'omnisharp-helm-find-implementations)
 (define-key omnisharp-mode-map (kbd "S-s-<f12>") 'omnisharp-helm-find-usages)
 (define-key omnisharp-mode-map (kbd "<M-RET>") 'omnisharp-run-code-action-refactoring)
-(define-key omnisharp-mode-map (kbd "<C-.>") 'omnisharp-run-code-action-refactoring)
+(define-key omnisharp-mode-map (kbd "C-.") 'omnisharp-run-code-action-refactoring)
 
 (define-key omnisharp-mode-map (kbd "C-k C-d") 'omnisharp-code-format)
 (define-key omnisharp-mode-map (kbd "C-d") 'duplicate-current-line-or-region)
