@@ -215,7 +215,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key global-map (kbd "C-g") 'goto-line)
 (define-key global-map (kbd "C-F") 'helm-projectile-ag)
 (global-set-key (kbd "C-x C-f") 'helm-for-files)
-
+(global-set-key (kbd "C-i") 'isearch-forward)
+(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
 (global-set-key [(control tab)] 'bury-buffer)
 (global-set-key [(control shift tab)] 'unbury-buffer)
 ;; enable ctrl-s to wrap around seeing as we disabled ctrl-r
