@@ -40,7 +40,7 @@ You might want to use an alias such as
 | Toggle directory view                  | F7                       |                                                           |
 | Full screen mode                       | Alt-Shift-Enter or Cmd-F |                                                           |
 | Jump to word                           | Cmd-J                    | Then first character of the word                          |
-| Incremental search                     | Ctrl-I, F3 to repeat     |                                                           |
+| Incremental search                     | Ctrl-I, F3 to repeat     | Or Ctrl-S, and press again to repeat                      |
 | Switch to previous buffer              | Ctrl-Tab                 |                                                           |
 | Find in files (incrementally!)         | Ctrl-Shift-F             | Requires ag https://github.com/ggreer/the_silver_searcher |
 | Navigate split windows                 | Alt- ← ↑ ↓ →             |                                                           |
