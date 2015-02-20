@@ -74,3 +74,5 @@
       (compile test-command))))
 
 (setq-default cursor-type 'bar)
+(setq omnisharp-company-match-type 'company-match-flx)
+(setq gc-cons-threshold 20000000)
