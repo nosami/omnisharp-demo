@@ -220,6 +220,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
 (global-set-key [(control tab)] 'bury-buffer)
 (global-set-key [(control shift tab)] 'unbury-buffer)
+(global-set-key (kbd "C-M-<left>") 'er/expand-region)
+(global-set-key (kbd "C-M-<right>") 'er/contract-region)
 ;; enable ctrl-s to wrap around seeing as we disabled ctrl-r
 (defadvice isearch-repeat (after isearch-no-fail activate)
   (unless isearch-success

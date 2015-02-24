@@ -42,6 +42,8 @@ You might want to use an alias such as
 | Jump to word                           | Cmd-J                    | Then first character of the word                          |
 | Incremental search                     | Ctrl-I, F3 to repeat     | Or Ctrl-S, and press again to repeat                      |
 | Switch to previous buffer              | Ctrl-Tab                 |                                                           |
+| Expand selection                       | Ctrl-Alt-Left            |                                                           |
+| Contract selection                     | Ctrl-Alt-Right           |                                                           |
 | Find in files (incrementally!)         | Ctrl-Shift-F             | Requires ag https://github.com/ggreer/the_silver_searcher |
 | Navigate split windows                 | Alt- ← ↑ ↓ →             |                                                           |
 | Save file                              | Cmd-S                    |                                                           |
