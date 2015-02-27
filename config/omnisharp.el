@@ -48,7 +48,7 @@
   (flycheck-mode)
   (linum-mode)
   (whole-line-or-region-mode)
-  (autopair-mode)
+  (electric-pair-mode)
   (setq c-basic-offset 4) ; indents 4 chars
   (setq tab-width 4)          ; and 4 char wide for TAB
   (setq indent-tabs-mode nil) ; And force use of spaces
@@ -76,3 +76,25 @@
 (setq-default cursor-type 'bar)
 (setq omnisharp-company-match-type 'company-match-flx)
 (setq gc-cons-threshold 20000000)
+
+(defun csharp-newline-and-indent ()
+  "Open a newline and indent.
+If point is between a pair of braces, opens newlines to put braces
+on their own line."
+  (interactive)
+  (save-excursion
+    (save-match-data
+      (when (and
+             (looking-at " *}")
+             (save-match-data
+               (when (looking-back "{ *")
+                 (goto-char (match-beginning 0))
+                 (unless (looking-back "^[[:space:]]*")
+                   (newline-and-indent))
+                 t)))
+        (unless (and (boundp electric-pair-open-newline-between-pairs)
+                     electric-pair-open-newline-between-pairs
+                     electric-pair-mode)
+          (goto-char (match-beginning 0))
+          (newline-and-indent)))))
+  (newline-and-indent)) 

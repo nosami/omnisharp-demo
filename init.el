@@ -257,23 +257,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (insert "}")
   (c-indent-defun))
-(defun csharp-newline-and-indent ()
-  "Open a newline and indent.
-If point is between a pair of braces, opens newlines to put braces
-on their own line."
-  (interactive)
-  (save-excursion
-    (save-match-data
-      (when (and
-             (looking-at " *}")
-             (save-match-data
-               (when (looking-back "{ *")
-                 (goto-char (match-beginning 0))
-                 (newline-and-indent)
-                 t)))
-        (goto-char (match-beginning 0))
-        (newline-and-indent))))
-  (newline-and-indent))
 
 ;; better than vim-vinegar
 (require 'dired)
