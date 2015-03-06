@@ -8,8 +8,10 @@
 (define-key omnisharp-mode-map (kbd "}") 'csharp-indent-function-on-closing-brace) 
 (define-key omnisharp-mode-map (kbd "<RET>") 'csharp-newline-and-indent) 
 
-(define-key omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition )
+(define-key omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition)
 (define-key omnisharp-mode-map (kbd "s-d") 'omnisharp-go-to-definition)
+(define-key omnisharp-mode-map (kbd "S-s-<up>") 'omnisharp-navigate-up)
+(define-key omnisharp-mode-map (kbd "S-s-<down>") 'omnisharp-navigate-down)
 (define-key omnisharp-mode-map (kbd "S-<f12>") 'omnisharp-helm-find-usages)
 
 (define-key omnisharp-mode-map (kbd "s-u") 'omnisharp-helm-find-usages)

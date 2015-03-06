@@ -212,6 +212,22 @@ argument, use another window."
          "Cannot go to definition as none was returned by the API.")
       (omnisharp-go-to-file-line-and-column json-result other-window))))
 
+(defun omnisharp-navigate-up ()
+  "Navigate up to the the next definition location"
+  (interactive)
+  (let* ((json-result (omnisharp-post-message-curl-as-json
+                       (concat (omnisharp-get-host) "navigateup")
+                       (omnisharp--get-common-params))))
+    (omnisharp-go-to-file-line-and-column json-result)))
+
+(defun omnisharp-navigate-down ()
+  "Navigate up to the the previous definition location"
+  (interactive)
+  (let* ((json-result (omnisharp-post-message-curl-as-json
+                       (concat (omnisharp-get-host) "navigatedown")
+                       (omnisharp--get-common-params))))
+    (omnisharp-go-to-file-line-and-column json-result)))
+
 (defun omnisharp-go-to-definition-other-window ()
   "Do `omnisharp-go-to-definition' displaying the result in a different window."
   (interactive)

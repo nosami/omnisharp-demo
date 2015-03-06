@@ -46,6 +46,8 @@ You might want to use an alias such as
 | Contract selection                     | Ctrl-Alt-Right           |                                                           |
 | Find in files (incrementally!)         | Ctrl-Shift-F             | Requires ag https://github.com/ggreer/the_silver_searcher |
 | Navigate split windows                 | Alt- ← ↑ ↓ →             |                                                           |
+| Navigate up to previous definition     | Cmd-Shift-up             |                                                           |
+| Navigate down to next definition       | Cmd-Shift-down           |                                                           |
 | Save file                              | Cmd-S                    |                                                           |
 | Quit                                   | Cmd-Q                    |                                                           |
 
