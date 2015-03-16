@@ -10,7 +10,7 @@ This is meant for people who are new to emacs and want to get running quickly.
 
 To install ```git clone https://github.com/nosami/omnisharp-demo.git ~/.emacs.d```
 
-For OSX, use http://emacsformacosx.com/ or ```sudo brew install emacs -cocoa --with-gnutls```
+For OSX, use http://emacsformacosx.com/ or ```brew install emacs -cocoa --with-gnutls```
 
 For Windows, use http://emacsbinw64.sourceforge.net/
 
