@@ -18,6 +18,8 @@ For OSX you may need to remove an old version of emacs from /usr/bin as well (or
 $ sudo rm /usr/bin/emacs
 $ sudo rm -rf /usr/share/emacs
 ```
+or create an alias
+```alias emacs="/usr/local/Cellar/emacs/24.3/Emacs.app/Contents/MacOS/Emacs -nw"```
 
 For Windows, use http://emacsbinw64.sourceforge.net/
 
