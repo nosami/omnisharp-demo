@@ -12,6 +12,13 @@ To install ```git clone https://github.com/nosami/omnisharp-demo.git ~/.emacs.d`
 
 For OSX, use http://emacsformacosx.com/ or ```brew install emacs -cocoa --with-gnutls```
 
+For OSX you may need to remove an old version of emacs from /usr/bin as well (or change paths)
+
+```
+$ sudo rm /usr/bin/emacs
+$ sudo rm -rf /usr/share/emacs
+```
+
 For Windows, use http://emacsbinw64.sourceforge.net/
 
 To run k commands from emacs on OSX, you'll need to start it from the shell to
