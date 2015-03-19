@@ -44,7 +44,7 @@
 (require 'package)
 (setq package-archives
       '(("melpa"
-         . "http://melpa.milkbox.net/packages/")))
+         . "http://melpa.org/packages/")))
 (package-initialize)
 
 (defun comment-or-uncomment-region-or-line ()
