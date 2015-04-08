@@ -285,13 +285,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "M-<up>") 'windmove-up)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 
-(setq backup-directory-alist
-          `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-          `((".*" ,temporary-file-directory t)))
+;; (setq backup-directory-alist
+;;           `((".*" . ,temporary-file-directory)))
+;; (setq auto-save-file-name-transforms
+;;           `((".*" ,temporary-file-directory t)))
 ;; disable auto-save and auto-backup
 (setq auto-save-default nil)
 (setq make-backup-files nil)
+(setq create-lockfiles nil)
+
 (require 'highlight-parentheses)
 (define-globalized-minor-mode global-highlight-parentheses-mode
   highlight-parentheses-mode
