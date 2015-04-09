@@ -177,8 +177,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq yas-snippet-dirs
       '("~/.emacs.d/yasnippet-csharp"))
 
-(yas-global-mode 1)
-
 (defun dos2unix (buffer)
   "Automate M-% C-q C-m RET C-q C-j RET"
   (interactive "*b")
@@ -222,7 +220,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key [(control shift tab)] 'unbury-buffer)
 (global-set-key (kbd "C-M-<left>") 'er/expand-region)
 (global-set-key (kbd "C-M-<right>") 'er/contract-region)
-(global-set-key (kbd "<tab>") 'tab-indent-or-complete)
 ;; enable ctrl-s to wrap around seeing as we disabled ctrl-r
 (defadvice isearch-repeat (after isearch-no-fail activate)
   (unless isearch-success
@@ -323,3 +320,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         (load (file-name-sans-extension fullpath)))))))
 (load-directory "~/.emacs.d/config")
 
+;; (add-hook 'term-mode-hook 'evil-emacs-state)
+
+(defun my-term-use-utf8 ()
+  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+
+(add-hook 'term-exec-hook 'my-term-use-utf8)
+
+(defun my-term-hook ()
+  (goto-address-mode)
+  (define-key term-raw-map "\C-y" 'my-term-paste))
+
+(add-hook 'term-mode-hook 'my-term-hook)
+
+(setq system-uses-terminfo nil)

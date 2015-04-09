@@ -45,6 +45,7 @@
 
 (defun my-csharp-mode ()
   (add-to-list 'company-backends 'company-omnisharp)
+  (yas-minor-mode)
   (omnisharp-mode)
   (company-mode)
   (flycheck-mode)
