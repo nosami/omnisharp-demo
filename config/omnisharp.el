@@ -61,6 +61,19 @@
 
 (setq omnisharp-company-strip-trailing-brackets nil)
 (add-hook 'csharp-mode-hook 'my-csharp-mode)
+
+(add-hook 'js-mode-hook 
+          (lambda () 
+             (add-hook 'after-save-hook 'omnisharp-notify-file-changed)))
+
+(defun omnisharp-notify-file-changed ()
+  (interactive)
+  (if (string-equal (file-name-nondirectory buffer-file-name) "project.json")
+                   (omnisharp-post-message-curl-as-json
+                    (concat (omnisharp-get-host) "filesChanged") 
+                    (list (omnisharp--get-common-params))
+                    )))
+
 (defun omnisharp-unit-test (mode)
   "Run tests after building the solution. Mode should be one of 'single', 'fixture' or 'all'" 
   (interactive)
