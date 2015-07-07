@@ -175,7 +175,7 @@ the curl program. Depends on the operating system."
                       single-or-multiline-log-string))
       (insert "\n"))))
 
-(defun omnisharp--get-curl-command-executable-string-for-api-name
+(defun omnisharp--get-curl-command-arguments-string-for-api-name
   (params api-name)
   "Returns the full command to call curl with PARAMS for the api API-NAME.
 Example: when called with \"getcodeactions\", returns
@@ -185,9 +185,7 @@ with \"stuff\" set to sensible values."
          (omnisharp--get-curl-command
           (concat (omnisharp-get-host) api-name)
           params)))
-    (cons
-     (plist-get command-plist :command)
-     (plist-get command-plist :arguments))))
+    (plist-get command-plist :arguments)))
 
 (defun omnisharp--get-curl-command-unix (url params)
   "Returns a command using plain curl that can be executed to
@@ -214,7 +212,8 @@ api at URL using that file as the parameters."
                  )))
     `(:command ,omnisharp--curl-executable-path
                :arguments
-               ("--silent" "-H" "Content-type: application/json"
+               ("--noproxy" "localhost"
+                "--silent" "-H" "Content-type: application/json"
                 "--data-binary"
                 ;; @ specifies a file path to curl
                 ,path-with-curl-prefix
@@ -286,8 +285,9 @@ moving point."
 		     "-s"
 		     solution-file-path-arg)))
     (cond
-     ((or (equal system-type 'cygwin) ;; No mono needed on cygwin
-	  (equal system-type 'windows-nt))
+     ((or (equal system-type 'cygwin) ;; No mono needed on cygwin or if using omnisharp-roslyn
+          (equal system-type 'windows-nt)
+          (not (s-ends-with? ".exe" server-exe-file-path-arg)))
       args)
      (t ; some kind of unix: linux or osx
       (cons "mono" args)))))

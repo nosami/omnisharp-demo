@@ -4,7 +4,7 @@
 ;; Author: Mika Vilpas
 ;; Version: 3.4
 ;; Url: https://github.com/sp3ctum/omnisharp-emacs
-;; Package-Requires: ((json "1.2") (flycheck "0.21") (dash "20141201.2206") (auto-complete "1.4") (popup "0.5.1") (csharp-mode "0.8.7") (cl-lib "0.5"))
+;; Package-Requires: ((json "1.2") (flycheck "0.21") (dash "20141201.2206") (auto-complete "1.4") (popup "0.5.1") (csharp-mode "0.8.7") (cl-lib "0.5") (s "1.9.0"))
 ;; Keywords: csharp c# IDE auto-complete intellisense
 
 ;;; Commentary:
@@ -14,8 +14,6 @@
 ;; that works in the background.
 ;;
 ;; See the project home page for more information.
-
-;; Work in progress! Judge gently!
 (require 'json)
 (require 'cl-lib)
 (require 'files)
@@ -27,93 +25,17 @@
 (require 'popup)
 (require 'etags)
 (require 'flycheck)
+(require 's)
 
-(add-to-list 'load-path (expand-file-name "./src/"))
-(add-to-list 'load-path (expand-file-name "./src/actions/"))
+(add-to-list 'load-path (expand-file-name (concat (file-name-directory (or load-file-name buffer-file-name)) "/src/")))
+(add-to-list 'load-path (expand-file-name (concat (file-name-directory (or load-file-name buffer-file-name)) "/src/actions")))
 
 (require 'omnisharp-utils)
 (require 'omnisharp-server-actions)
 (require 'omnisharp-auto-complete-actions)
-
-(defgroup omnisharp ()
-  "Omnisharp-emacs is a port of the awesome OmniSharp server to
-the Emacs text editor. It provides IDE-like features for editing
-files in C# solutions in Emacs, provided by an OmniSharp server
-instance that works in the background."
-  :group 'external
-  :group 'csharp)
+(require 'omnisharp-settings)
 
 ;;; Code:
-(defcustom omnisharp-host "http://localhost:2000/"
-  "Currently expected to end with a / character."
-  :group 'omnisharp
-  :type 'string)
-
-(defvar omnisharp--find-usages-buffer-name "* OmniSharp : Usages *"
-  "The name of the temporary buffer that is used to display the
-results of a 'find usages' call.")
-
-(defvar omnisharp-debug nil
-  "When non-nil, omnisharp-emacs will write entries a debug log")
-
-(defvar omnisharp--find-implementations-buffer-name "* OmniSharp : Implementations *"
-  "The name of the temporary buffer that is used to display the
-results of a 'find implementations' call.")
-
-(defvar omnisharp--ambiguous-symbols-buffer-name "* OmniSharp : Ambiguous unresolved symbols *"
-  "The name of the temporary buffer that is used to display any 
-ambiguous unresolved symbols of a 'fix usings' call.")
-
-(defvar omnisharp-find-usages-header
-  (concat "Usages in the current solution:"
-          "\n\n")
-  "This is shown at the top of the result buffer when
-omnisharp-find-usages is called.")
-
-(defvar omnisharp-find-implementations-header
-  (concat "Implementations of the current interface / class:"
-          "\n\n")
-  "This is shown at the top of the result buffer when
-omnisharp-find-implementations is called.")
-
-(defvar omnisharp-ambiguous-results-header
-  (concat "These results are ambiguous. You can run
-(omnisharp-run-code-action-refactoring) when point is on them to see
-options for fixing them."
-          "\n\n")
-  "This is shown at the top of the result buffer when
-there are ambiguous unresolved symbols after running omnisharp-fix-usings")
-
-(defcustom omnisharp-code-format-expand-tab t
-  "Whether to expand tabs to spaces in code format requests."
-  :group 'omnisharp
-  :type '(choice (const :tag "Yes" t)
-		 (const :tag "No" nil)))
-
-(defvar omnisharp-mode-map
-  (let ((map (make-sparse-keymap)))
-    ;; TODO add good default keys here
-    ;;(define-key map (kbd "C-c f") 'insert-foo)
-    map)
-  "Keymap for omnisharp-mode.")
-
-;; Note that emacs seems to internally expect windows paths to have
-;; forward slashes.
-(eval-after-load 'omnisharp
-  '(defcustom omnisharp--windows-curl-tmp-file-path
-     (omnisharp--convert-backslashes-to-forward-slashes
-      (concat (getenv "USERPROFILE")
-              "/omnisharp-tmp-file.cs"))
-     "The full file path where to save temporary stuff that gets sent to
-the OmniSharp API. Only used on Windows.
-Must be writable by the current user."
-     :group 'omnisharp
-     :type 'file))
-
-(defcustom omnisharp--curl-executable-path
-  "curl"
-  "The absolute or relative path to the curl executable.")
-
 ;;;###autoload
 (define-minor-mode omnisharp-mode
   "Omnicompletion (intellisense) and more for C# using an OmniSharp
@@ -126,11 +48,7 @@ server backend."
   (omnisharp--start-omnisharp-server-for-solution-in-parent-directory)
 
   ;; These are selected automatically when flycheck is enabled
-  (--each '(
-            
-            csharp-omnisharp-curl-semantic-errors)
-
-    (add-to-list 'flycheck-checkers it)))
+  (add-to-list 'flycheck-checkers 'csharp-omnisharp-codecheck))
 
 (defun omnisharp--init-imenu-support ()
   (when omnisharp-imenu-support
@@ -176,7 +94,9 @@ server backend."
      ["Show documentation" omnisharp-current-type-documentation]
      ["Show type and add it to kill ring" omnisharp-current-type-information-to-kill-ring]
      ["Find usages" omnisharp-find-usages]
+     ["Find usages with ido" omnisharp-find-usages-with-ido]
      ["Find implementations" omnisharp-find-implementations]
+     ["Find implementations with ido" omnisharp-find-implementations-with-ido]
      ["Rename" omnisharp-rename]
      ["Rename interactively" omnisharp-rename-interactively])
 
@@ -211,22 +131,6 @@ argument, use another window."
         (message
          "Cannot go to definition as none was returned by the API.")
       (omnisharp-go-to-file-line-and-column json-result other-window))))
-
-(defun omnisharp-navigate-up ()
-  "Navigate up to the the next definition location"
-  (interactive)
-  (let* ((json-result (omnisharp-post-message-curl-as-json
-                       (concat (omnisharp-get-host) "navigateup")
-                       (omnisharp--get-common-params))))
-    (omnisharp-go-to-file-line-and-column json-result)))
-
-(defun omnisharp-navigate-down ()
-  "Navigate up to the the previous definition location"
-  (interactive)
-  (let* ((json-result (omnisharp-post-message-curl-as-json
-                       (concat (omnisharp-get-host) "navigatedown")
-                       (omnisharp--get-common-params))))
-    (omnisharp-go-to-file-line-and-column json-result)))
 
 (defun omnisharp-go-to-definition-other-window ()
   "Do `omnisharp-go-to-definition' displaying the result in a different window."
@@ -293,6 +197,50 @@ asynchronously. On completions, CALLBACK is run with the quickfixes as its only 
      (apply callback (list (omnisharp--vector-to-list
                             (cdr (assoc 'QuickFixes quickfix-response))))))))
 
+(defun omnisharp-find-implementations-popup ()
+  "Show a popup containing all implementations of the interface under
+point, or classes derived from the class under point. Allow the user
+to select one (or more) to jump to."
+  (interactive)
+  (message "Finding implementations...")
+  (omnisharp-find-implementations-worker
+    (omnisharp--get-common-params)
+    (lambda (quickfixes)
+      (cond ((equal 0 (length quickfixes))
+             (message "No implementations found."))
+
+            ;; Go directly to the implementation if there only is one
+            ((equal 1 (length quickfixes))
+             (omnisharp-go-to-file-line-and-column (car quickfixes)))
+
+            (t
+             (omnisharp-navigate-to-implementations-popup quickfixes))))))
+
+(defun omnisharp-get-implementation-title (item)
+  "Get the human-readable class-name declaration from an alist with
+information about implementations found in omnisharp-find-implementations-popup."
+  (let* ((text (cdr (assoc 'Text item))))
+    (if (or (string-match-p " class " text)
+            (string-match-p " interface " text))
+	text
+      (concat
+       (file-name-nondirectory (cdr (assoc 'FileName item)))
+       ":"
+       (number-to-string (cdr (assoc 'Line item))))
+      )))
+
+(defun omnisharp-get-implementation-by-name (items title)
+  "Return the implementation-object which matches the provided title."
+  (--first (string= title (omnisharp-get-implementation-title it))
+	   items))
+
+(defun omnisharp-navigate-to-implementations-popup (items)
+  "Creates a navigate-to-implementation popup with the provided items
+and navigates to the selected one."
+  (let* ((chosen-title (popup-menu* (mapcar 'omnisharp-get-implementation-title items)))
+	 (chosen-item  (omnisharp-get-implementation-by-name items chosen-title)))
+    (omnisharp-go-to-file-line-and-column chosen-item)))
+
 (defun omnisharp-fix-usings ()
   "Sorts usings, removes unused using statements and
 adds any missing usings. If there are any ambiguous unresolved symbols, they are
@@ -317,8 +265,8 @@ shown in a compilation buffer."
         (kill-buffer ambiguous-results-buffer))))
 
 (defun omnisharp-fix-usings-worker (filename
-                                    current-line
-                                    current-column)
+				    current-line
+				    current-column)
   "Sets the current buffer contents to a buffer with fixed up usings
 or if necessary, returns any ambiguous results so the user may fix
 them manually."
@@ -609,8 +557,8 @@ run-action-params: original parameters sent to /runcodeaction API."
   "Posts message to curl at URL with PARAMS asynchronously.
 On completion, the curl output is parsed as json and passed into CALLBACK."
   (omnisharp-post-message-curl-async url params
-    (lambda (str)
-      (funcall callback (omnisharp--json-read-from-string str)))))
+                                     (lambda (str)
+                                       (funcall callback (omnisharp--json-read-from-string str)))))
 
 (defun omnisharp-post-message-curl-async (url params callback)
   "Post json stuff to url asynchronously with --data set to given params.
@@ -923,59 +871,16 @@ with the formatted result. Saves the file before starting."
 (setq flycheck-csharp-omnisharp-curl-executable
       omnisharp--curl-executable-path)
 
-(flycheck-define-checker csharp-omnisharp-curl
+(flycheck-define-checker csharp-omnisharp-codecheck
   "A csharp source syntax checker using curl to call an OmniSharp
-server process running in the background. Only checks the syntax - not
-type errors."
+server process running in the background."
   ;; This must be an external process. Currently flycheck does not
   ;; support using elisp functions as checkers.
   :command ("curl" ; this is overridden by
                                         ; flycheck-csharp-omnisharp-curl-executable if it
                                         ; is set
             (eval
-             (omnisharp--get-curl-command-executable-string-for-api-name
-              (omnisharp--get-common-params)
-              "syntaxerrors")))
-
-  :error-patterns ((error line-start
-                          (file-name) ":"
-                          line ":"
-                          column
-                          " "
-                          (message (one-or-more not-newline))))
-  :error-parser (lambda (output checker buffer)
-                  (omnisharp--flycheck-error-parser-raw-json
-                   output checker buffer))
-
-  :predicate (lambda () omnisharp-mode)
-  :next-checkers ((no-errors . csharp-omnisharp-curl-code-issues)))
-
-(flycheck-define-checker csharp-omnisharp-curl-code-issues
-  "Reports code issues (refactoring suggestions) that the user can
-then accept and have fixed automatically."
-  :command ("curl"
-            (eval
-             (omnisharp--get-curl-command-executable-string-for-api-name
-              (omnisharp--get-common-params)
-              "getcodeissues")))
-
-  :error-patterns ((warning line-start
-                            (file-name) ":"
-                            line ":"
-                            column
-                            " "
-                            (message (one-or-more not-newline))))
-  :error-parser (lambda (output checker buffer)
-                  (omnisharp--flycheck-error-parser-raw-json
-                   output checker buffer 'info))
-  :predicate (lambda () omnisharp-mode))
-
-(flycheck-define-checker csharp-omnisharp-curl-semantic-errors
-  "Reports semantic errors (type errors) that prevent successful
-compilation."
-  :command ("curl"
-            (eval
-             (omnisharp--get-curl-command-executable-string-for-api-name
+             (omnisharp--get-curl-command-arguments-string-for-api-name
               (omnisharp--get-common-params)
               "codecheck")))
 
@@ -987,7 +892,8 @@ compilation."
                           (message (one-or-more not-newline))))
   :error-parser (lambda (output checker buffer)
                   (omnisharp--flycheck-error-parser-raw-json
-                   output checker buffer 'info))
+                   output checker buffer))
+
   :predicate (lambda () omnisharp-mode))
 
 (defun omnisharp--flycheck-error-parser-raw-json
@@ -1050,6 +956,43 @@ cursor at that location"
         imenu-list)
     (error nil)))
 
+(defun omnisharp-format-find-output-to-ido (item)
+  (let ((filename (cdr (assoc 'FileName item))))
+    (cons
+     (cons
+      (car (car item))
+      (concat (car (last (split-string filename "/"))) ": " (s-trim (cdr (car item)))))
+     (cdr item))))
+
+(defun omnisharp-find-implementations-with-ido (&optional other-window)
+  (interactive "P")
+  (let ((quickfixes (omnisharp--vector-to-list
+                     (cdr (assoc 'QuickFixes (omnisharp-post-message-curl-as-json
+                                              (concat (omnisharp-get-host) "findimplementations")
+                                              (omnisharp--get-common-params)))))))
+    (cond ((equal 0 (length quickfixes))
+           (message "No implementations found."))
+          ((equal 1 (length quickfixes))
+           (omnisharp-go-to-file-line-and-column (car quickfixes) other-window))
+          (t
+           (omnisharp--choose-and-go-to-quickfix-ido
+            (mapcar 'omnisharp-format-find-output-to-ido quickfixes)
+            other-window)))))
+
+(defun omnisharp-find-usages-with-ido (&optional other-window)
+  (interactive "P")
+  (let ((quickfixes (omnisharp--vector-to-list
+                     (cdr (assoc 'QuickFixes (omnisharp-post-message-curl-as-json
+                                              (concat (omnisharp-get-host) "findusages")
+                                              (omnisharp--get-common-params)))))))
+    (cond ((equal 0 (length quickfixes))
+           (message "No usages found."))
+          ((equal 1 (length quickfixes))
+           (omnisharp-go-to-file-line-and-column (car quickfixes) other-window))
+          (t
+           (omnisharp--choose-and-go-to-quickfix-ido
+            (mapcar 'omnisharp-format-find-output-to-ido quickfixes)
+            other-window)))))
 
 (defun omnisharp-navigate-to-current-file-member
   (&optional other-window)
@@ -1128,6 +1071,15 @@ ido-completing-read. Returns the chosen element."
           request)))
     (omnisharp--choose-and-go-to-quickfix-ido quickfixes)))
 
+(defun omnisharp-format-symbol (item) 
+  (cons
+   (cons
+    (car (car item))
+    (mapconcat
+     'identity
+     (reverse (delete "in" (split-string (cdr (car item)) "[\t\n ()]" t))) "."))
+   (cdr item)))
+
 ;; No need for a worker pattern since findsymbols takes no arguments
 (defun omnisharp-navigate-to-solution-member
   (&optional other-window)
@@ -1137,8 +1089,9 @@ ido-completing-read. Returns the chosen element."
           (concat (omnisharp-get-host) "findsymbols")
           nil)))
     (omnisharp--choose-and-go-to-quickfix-ido
-     (omnisharp--vector-to-list
-      (cdr (assoc 'QuickFixes quickfix-response)))
+     (mapcar 'omnisharp-format-symbol
+	     (omnisharp--vector-to-list
+	      (cdr (assoc 'QuickFixes quickfix-response))))
      other-window)))
 
 (defun omnisharp-navigate-to-solution-member-other-window ()
@@ -1211,28 +1164,28 @@ file. With prefix argument uses another window."
   (let ((start-point (point))
         (found-point (point))
         (found-start nil))
-     (save-excursion
-       (let ((test-point (point)))
-         (while (not found-start)
-           (search-backward-regexp "(\\|;\\|{")
-           (cond ((eq (point) test-point)
-                  (setq found-start t))
+    (save-excursion
+      (let ((test-point (point)))
+        (while (not found-start)
+          (search-backward-regexp "(\\|;\\|{")
+          (cond ((eq (point) test-point)
+                 (setq found-start t))
 
-                 ((looking-at-p "(")
-                  (setq test-point (point))
+                ((looking-at-p "(")
+                 (setq test-point (point))
 
-                  ;; forward-sexp will throw an error if the sexp is unbalanced
-                  (condition-case nil
-                      (forward-sexp)
-                    (error nil))
-                  
-                  (when (> (point) start-point)
-                    (setq found-point test-point)
-                    (setq found-start t))
-                  (goto-char test-point))
+                 ;; forward-sexp will throw an error if the sexp is unbalanced
+                 (condition-case nil
+                     (forward-sexp)
+                   (error nil))
+                 
+                 (when (> (point) start-point)
+                   (setq found-point test-point)
+                   (setq found-start t))
+                 (goto-char test-point))
 
-                 (t (setq found-start t))))))
-     (goto-char found-point)))
+                (t (setq found-start t))))))
+    (goto-char found-point)))
 
 (defun omnisharp--eldoc-default ()
   "Tries to find completion information about the method before point"
@@ -1243,8 +1196,8 @@ file. With prefix argument uses another window."
            (type-info (omnisharp--completion-result-get-item json-result 'DisplayText)))
 
       (if (and type-info (not (string= "" type-info)))
-        (omnisharp--eldoc-fontify-string type-info)
-      nil))))
+          (omnisharp--eldoc-fontify-string type-info)
+        nil))))
 
 
 (defun omnisharp--eldoc-worker ()
@@ -1365,34 +1318,8 @@ contents with the issue at point fixed."
     (interactive)
     (message "Helm Finding usages...")
     (omnisharp-find-usages-worker
-     (omnisharp--get-common-params)
-     'omnisharp--helm-got-usages))
-
-  (defun omnisharp--helm-got-implementations (quickfixes)
-    ;; (lambda (quickfixes)
-      (cond ((equal 0 (length quickfixes))
-             (message "No implementations found."))
-
-            ;; Go directly to the implementation if there only is one
-            ((equal 1 (length quickfixes))
-             (omnisharp-go-to-file-line-and-column (car quickfixes)))
-
-            (t (setq omnisharp-helm-implementations-candidates (mapcar 'omnisharp--helm-usage-transform-candidate quickfixes))
-    (helm :sources (helm-make-source "Omnisharp - Symbol Usages" 'helm-source-sync
-                                     :candidates omnisharp-helm-implementations-candidates
-                                     :action 'omnisharp--helm-jump-to-candidate) ;
-          :truncate-lines t
-          :buffer omnisharp--find-implementations-buffer-name))
-
-             ))
-    
-  (defun omnisharp-helm-find-implementations ()
-    "Find usages for the symbol under point using Helm"
-    (interactive)
-    (message "Helm Finding implementations...")
-    (omnisharp-find-implementations-worker
-     (omnisharp--get-common-params)
-     'omnisharp--helm-got-implementations))
+      (omnisharp--get-common-params)
+      'omnisharp--helm-got-usages))
 
   (defun omnisharp--helm-jump-to-candidate (json-result)
     (omnisharp-go-to-file-line-and-column json-result)
@@ -1430,7 +1357,6 @@ contents with the issue at point fixed."
                          'face 'helm-grep-file)
              (nth 0 (split-string (cdr (assoc 'Text candidate)) "(")))
      candidate)))
-
 
 (provide 'omnisharp)
 

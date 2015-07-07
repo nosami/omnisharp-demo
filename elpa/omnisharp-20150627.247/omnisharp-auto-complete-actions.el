@@ -263,19 +263,21 @@ triggers a completion immediately"
           symbol)
       'stop)))
 
-(defun omnisharp-company-flx-score-filter-list (query l cache)
+(defun omnisharp-company-flx-score-filter-list (query candidates cache)
   (let ((matches nil))
-    (dolist (elt l)
-      (let* ((completion-text (omnisharp--get-company-candidate-data elt 'CompletionText))
+    (dolist (candidate candidates)
+      (let* ((completion-text (omnisharp--get-company-candidate-data
+                               candidate
+                               'CompletionText))
              (flx-val (flx-score completion-text query cache)))
         (when (not (null flx-val))
-          (setq matches (cons (cons elt flx-val) matches)))))
+          (setq matches (cons (cons candidate flx-val) matches)))))
 
     (if omnisharp-company-match-sort-by-flx-score
         (setq matches (sort matches (lambda (el1 el2) (> (nth 1 el1) (nth 1 el2)))))
       (setq matches (reverse matches)))
     
-    (mapcar (lambda (el1) (car el1)) matches)))
+    (mapcar 'car matches)))
 
 (defvar omnisharp-company-current-flx-match-list nil)
 (defvar omnisharp-company-current-flx-arg-being-matched nil)
@@ -294,10 +296,11 @@ triggers a completion immediately"
       (setq omnisharp-company-match-type 'company-match-simple)))
 
   (cl-case command
-    (prefix (when (and (bound-and-true-p omnisharp-mode) (not (company-in-string-or-comment)))
+    (prefix (when (and (bound-and-true-p omnisharp-mode)
+                       (not (company-in-string-or-comment)))
               (omnisharp-company--prefix)))
 
-    (candidates (if (and (fboundp 'flx-score) (eq omnisharp-company-match-type 'company-match-flx))
+    (candidates (if (eq omnisharp-company-match-type 'company-match-flx)
                     ;;flx matching
                     (progn
                         ;; If the completion arg is empty, just return what the server sends
@@ -309,15 +312,16 @@ triggers a completion immediately"
                             (setq omnisharp-company-current-flx-match-list (omnisharp--get-company-candidates arg))
                             (setq omnisharp-company-current-flx-arg-being-matched arg))
 
-                          ;; Let flex sort the results
+                          ;; Let flex filter the results
                           (omnisharp-company-flx-score-filter-list arg
                                                                    omnisharp-company-current-flx-match-list
                                                                    omnisharp-company-flx-cache)))
                     (omnisharp--get-company-candidates arg)))
 
 
-    ;; because "" doesn't return everything
-    (no-cache (or (equal arg "") (not (eq omnisharp-company-match-type 'company-match-simple))))
+    ;; because "" doesn't return everything, and we don't cache if we're handling the filtering
+    (no-cache (or (equal arg "")
+                  (not (eq omnisharp-company-match-type 'company-match-simple))))
 
     (match (if (eq omnisharp-company-match-type 'company-match-simple)
                nil
@@ -338,10 +342,9 @@ triggers a completion immediately"
 
     (ignore-case omnisharp-company-ignore-case)
 
-    (sorted omnisharp-company-sort-results)
-    ;; (sorted (if (eq omnisharp-company-match-type 'company-match-simple)
-    ;;             (not omnisharp-company-sort-results)
-    ;;           t))
+    (sorted (if (eq omnisharp-company-match-type 'company-match-simple)
+                (not omnisharp-company-sort-results)
+              t))
 
     ;; Check to see if we need to do any templating
     (post-completion (setq omnisharp-company-current-flx-arg-being-matched nil)
@@ -632,18 +635,14 @@ current buffer."
            ;;
            ;; Get the full item so we can then get the
            ;; RequiredNamespaceImport value from it
-           (completed-item
-            (-first (lambda (a)
-                      (equal result-completion-text
-                             (cdr (assoc 'CompletionText a))))
-                    json-result-alist))
+           (completion-snippet
+            (get-text-property 0 'Snippet result-completion-text))
            (required-namespace-import
-            (cdr (assoc 'RequiredNamespaceImport
-                        completed-item))))
+            (get-text-property 0 'RequiredNamespaceImport result-completion-text)))
 
-      (omnisharp--replace-symbol-in-buffer-with
-       (omnisharp--current-word-or-empty-string)
-       result-completion-text)
+      (if (and completion-snippet omnisharp-company-template-use-yasnippet (fboundp 'yas/expand-snippet))
+          (yas/expand-snippet completion-snippet (search-backward (omnisharp--current-word-or-empty-string)))
+        (omnisharp--replace-symbol-in-buffer-with (omnisharp--current-word-or-empty-string) result-completion-text))
 
       (when required-namespace-import
         (omnisharp--insert-namespace-import required-namespace-import)))))
@@ -703,9 +702,11 @@ is a more sophisticated matching framework than what popup.el offers."
   (mapcar
    (-lambda ((&alist 'DisplayText display-text
                      'CompletionText completion-text
-                     'Description description))
+                     'Description description
+                     'Snippet snippet
+                     'RequiredNamespaceImport require-ns-import))
             (popup-make-item display-text
-                             :value completion-text
+                             :value (propertize completion-text 'Snippet snippet 'RequiredNamespaceImport require-ns-import)
                              :document description))
    json-result-alist))
 
